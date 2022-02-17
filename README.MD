@@ -12,11 +12,11 @@ But you don't have to implement all the steps above.
 
 ## 2- Recommended Tools
 
-- Gitlab-CI
+- Gitlab-CI/Jenkins
 - docker-compose
 - snyk
 - Ansible
-- Terraform
+- Terraform (Optional)
 - ssh
 
 For the docker-compose.yml file (which will be used for deployment), please see the file below and get inspiration from it

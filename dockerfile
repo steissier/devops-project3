@@ -6,7 +6,7 @@ COPY entry_point.sh /app/entry_point.sh
 COPY requirements.txt /app/requirements.txt
 RUN python3 -m pip install --upgrade pip
 RUN pip install -r /app/requirements.txt
-RUN rn -f /app/requirements.txt
+RUN rm -f /app/requirements.txt
 RUN chmod +x /app/entry_point.sh
 EXPOSE 8000
 ENTRYPOINT [ "sh", "/app/entry_point.sh" ]

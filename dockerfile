@@ -9,5 +9,5 @@ RUN pip install -r /requirements.txt
 RUN rm -f /requirements.txt
 RUN chmod +x /entry_point.sh
 EXPOSE 8000
-ENTRYPOINT [ "sh", "/app/entry_point.sh" ]
+ENTRYPOINT [ "sh", "/entry_point.sh" ]
 

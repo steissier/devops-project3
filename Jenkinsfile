@@ -37,12 +37,12 @@ pipeline{
                         cd test/devops-project3
                         docker-compose up -d
                         sleep 5
-                        curl http://localhost:8000/admin/login/ | tac | grep -iq Log
+                        curl http://localhost:8000/ | tac | tac | grep -iq Hello
                     '''
                 }
             }
         }
-        
+
         stage ('Push image') {
             agent {
                 label 'agent1'

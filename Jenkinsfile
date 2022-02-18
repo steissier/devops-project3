@@ -47,13 +47,12 @@ pipeline{
                 label 'agent1'
             }
             environment {
-                PASSWORD=credentials('id_dockerhub')
+                PASSWORD=credentials('docker_pswd')
             }
             steps {
                 script {
                     sh '''
-                        docker stop ${CONTAINTER_NAME_WEB} ${CONTAINTER_NAME_DB} || true
-                        docker rm ${CONTAINTER_NAME_WEB} ${CONTAINTER_NAME_DB} || true
+                        docker-compose down || true
                         docker tag ${IMAGE_NAME} ${USERNAME}/${IMAGE_NAME}:${IMAGE_TAG}
                         docker login -u ${USERNAME} -p ${PASSWORD}
                         docker push ${USERNAME}/${IMAGE_NAME}:${IMAGE_TAG}

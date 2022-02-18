@@ -1,6 +1,6 @@
 pipeline{
     environment{
-        IMAGE_TAG = "${BUILD_TAG}"
+        IMAGE_TAG = "${BUILD_NUMBER}"
         USERNAME = "26021973"
         REPO_GIT = "https://github.com/steissier/devops-project3.git"
         IMG_NAME_WEBAPP = "img_webapp"

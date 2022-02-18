@@ -11,6 +11,8 @@ services:
       - postgres
     networks:
       - projet
+    links:
+      - postgres
   postgres:
     container_name: postgres
     image: postgres:9

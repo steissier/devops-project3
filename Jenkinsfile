@@ -9,25 +9,7 @@ pipeline{
     }
     agent any
 
-
     stages {
-/*        stage ('Récupération repo Git') {
-            agent {
-                label 'agent1'
-            }
-            steps {
-                script {
-                    sh '''
-                        rm -r test || true
-                        mkdir test
-                        cd test
-                        git clone ${REPO_GIT}
-                        cat devops-project3/entry_point.sh | grep -iq "#!/bin/bash"
-                    '''
-                }
-            }
-        }
-*/
         stage ('Build du conteneur & lancement application') {
             agent {
                 label 'agent1'
@@ -37,12 +19,27 @@ pipeline{
                     sh '''
                         docker-compose up -d
                         sleep 10
-                        curl http://localhost:8000/ | tac | tac | grep -iq Hello
+                        curl http://localhost:8000/ | tac | grep -iq Hello
                     '''
                 }
             }
         }
-
+        stage ('Test de securité') {
+            agent {
+                label 'agent1'
+            }
+            environment {
+                SNYKKEY=credentials('snykKey')
+            }
+            steps {
+                script {
+                    sh '''
+                        snyk auth ${SNYKKEY}
+                        snyk container test ${IMG_NAME_WEBAPP} > test_result.txt
+                    '''
+                }
+            }
+        }
         stage ('Push image') {
             agent {
                 label 'agent1'
@@ -53,10 +50,7 @@ pipeline{
             steps {
                 script {
                     sh '''
-                        
                         docker-compose down
-                        #docker stop ${CONTAINTER_NAME_DB} ${CONTAINTER_NAME_WEB}
-                        #docker rm ${CONTAINTER_NAME_DB} ${CONTAINTER_NAME_WEB}
                         docker tag ${IMG_NAME_WEBAPP} ${USERNAME}/${IMG_NAME_WEBAPP}:${IMAGE_TAG}
                         docker login -u ${USERNAME} -p ${PASSWORD}
                         docker push ${USERNAME}/${IMG_NAME_WEBAPP}:${IMAGE_TAG}

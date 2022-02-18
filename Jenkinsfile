@@ -10,8 +10,6 @@ pipeline{
     }
     agent any
 
-    
-
     stages {
         stage ('Récupération repo Git') {
             agent {

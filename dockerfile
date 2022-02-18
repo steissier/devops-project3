@@ -3,6 +3,7 @@ LABEL maintainer="Sebastien Teissier"
 ADD ./src /src
 ADD ./images /images
 COPY entry_point.sh /entry_point.sh
+RUN python3 -m pip install --upgrade pip
 RUN pip install Django
 RUN pip install psycopg2
 RUN pip install Pillow

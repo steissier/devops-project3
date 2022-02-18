@@ -1,0 +1,9 @@
+pipeline{
+    environment{
+        IMAGE_NAME = "img-webapp"
+        IMAGE_TAG = "${BUILD_TAG}"
+        USERNAME = "26021973"
+        CONTAINTER_NAME = "webapp"
+        STAGING = "172.31.19.23"
+    }
+    agent any

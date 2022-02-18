@@ -1,19 +1,16 @@
 version: '3.3'
-
 services:
   app:
     container_name: webapp
     build:
       context: .
       dockerfile: Dockerfile
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=postgres
     ports:
       - "8000:80"
     depends_on:
       - postgres
+    networks:
+      - projet
   postgres:
     container_name: postgres
     image: postgres:9
@@ -23,3 +20,8 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=postgres
+    networks:
+      - projet
+networks:
+    projet:
+        driver: bridge

@@ -1,4 +1,5 @@
 FROM python:3
+NAME webapp
 LABEL maintainer="Sebastien Teissier"
 
 ADD ./src /src

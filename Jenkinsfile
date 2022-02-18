@@ -55,7 +55,8 @@ pipeline{
                         docker stop ${CONTAINTER_NAME_DB} ${CONTAINTER_NAME_WEB}
                         docker rm ${CONTAINTER_NAME_DB} ${CONTAINTER_NAME_WEB}
                         docker tag ${IMG_NAME_WEBAPP} ${USERNAME}/${IMG_NAME_WEBAPP}:${IMAGE_TAG}
-                        docker login -u ${USERNAME} -p Maranello01
+                        echo ${PASSWORD}
+                        docker login -u ${USERNAME} -p ${PASSWORD}
                         docker push ${USERNAME}/${IMG_NAME_WEBAPP}:${IMAGE_TAG}
                         docker rmi ${USERNAME}/${IMG_NAME_WEBAPP}:${IMAGE_TAG}
                     '''

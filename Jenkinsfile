@@ -60,11 +60,11 @@ pipeline{
                         docker push ${USERNAME}/${IMG_NAME_WEBAPP}:${IMAGE_TAG}
                         docker rmi ${USERNAME}/${IMG_NAME_WEBAPP}:${IMAGE_TAG}
                     '''
-
                 }
             }
         }
-        post {
+    }
+    post {
         always {
             script {
                 if ( currentBuild.result == "SUCCESS" ) {
@@ -83,4 +83,4 @@ pipeline{
         }
     }
 }
-    
+  

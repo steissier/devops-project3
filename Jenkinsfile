@@ -36,6 +36,7 @@ pipeline{
             steps {
                 script {
                     sh '''
+                        cd test/devops-project3
                         docker-compose up -d
                         sleep 5
                         curl http://localhost:8000/admin/login/ | grep -iq "Log in | Django site admin"

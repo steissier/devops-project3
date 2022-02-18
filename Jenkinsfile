@@ -42,6 +42,7 @@ pipeline{
                 }
             }
         }
+        
         stage ('Push image') {
             agent {
                 label 'agent1'

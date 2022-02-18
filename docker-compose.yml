@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: img_webapp
     ports:
       - "8000:8000"
     depends_on:

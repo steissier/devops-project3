@@ -1,7 +1,6 @@
 # Devops Project 3 : Django webapp CICD
 
 ## 1- Goal
-test
 
 The goal of this project is to verify your ability to automate build and deploy containerized applications.
 In fact the most completed your pipeline will be, the most higher will be your rating.

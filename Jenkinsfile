@@ -24,7 +24,7 @@ pipeline{
                         mkdir test
                         cd test
                         git clone ${REPO_GIT}
-                        cat devops-project3/entry_point.sh | grep -ip "#!/bin/bash"
+                        cat devops-project3/entry_point.sh | grep -iq "#!/bin/bash"
                     '''
                 }
             }

@@ -36,7 +36,7 @@ pipeline{
                     sh '''
                         cd test/devops-project3
                         docker-compose up -d
-                        sleep 5
+                        sleep 10
                         curl http://localhost:8000/ | tac | tac | grep -iq Hello
                     '''
                 }

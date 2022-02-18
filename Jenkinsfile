@@ -36,7 +36,7 @@ pipeline{
                 script {
                     sh '''
                         snyk auth ${SNYKKEY}
-                        snyk container test ${IMG_NAME_WEBAPP} > test_result.txt
+                        snyk container test ${IMG_NAME_WEBAPP} --severity-threshold=high  > test_result.log
                     '''
                 }
             }

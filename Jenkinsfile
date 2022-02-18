@@ -11,7 +11,7 @@ pipeline{
 
 
     stages {
-        stage ('Récupération repo Git') {
+/*        stage ('Récupération repo Git') {
             agent {
                 label 'agent1'
             }
@@ -27,6 +27,7 @@ pipeline{
                 }
             }
         }
+*/
         stage ('Build du conteneur & lancement application') {
             agent {
                 label 'agent1'
@@ -34,7 +35,6 @@ pipeline{
             steps {
                 script {
                     sh '''
-                        cd test/devops-project3
                         docker-compose up -d
                         sleep 10
                         curl http://localhost:8000/ | tac | tac | grep -iq Hello
@@ -53,6 +53,7 @@ pipeline{
             steps {
                 script {
                     sh '''
+                        
                         docker-compose down
                         #docker stop ${CONTAINTER_NAME_DB} ${CONTAINTER_NAME_WEB}
                         #docker rm ${CONTAINTER_NAME_DB} ${CONTAINTER_NAME_WEB}

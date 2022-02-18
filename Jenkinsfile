@@ -17,6 +17,7 @@ pipeline{
             steps {
                 script {
                     sh '''
+                        docker-compose down || true
                         docker-compose up -d
                         sleep 10
                         curl http://localhost:8000/ | tac | grep -iq Hello

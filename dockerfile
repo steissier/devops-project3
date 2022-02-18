@@ -8,6 +8,6 @@ RUN pip install Django
 RUN pip install psycopg2
 RUN pip install Pillow
 RUN pip install requests
-EXPOSE 80
+EXPOSE 8000
 ENTRYPOINT [ "sh", "/entry_point.sh" ]
 

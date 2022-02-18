@@ -1,6 +1,6 @@
 pipeline{
     environment{
-        IMAGE_NAME = "img-webapp"
+        IMAGE_NAME = "img_webapp"
         IMAGE_TAG = "${BUILD_TAG}"
         USERNAME = "26021973"
         REPO_GIT = "https://github.com/steissier/devops-project3.git"
@@ -52,7 +52,7 @@ pipeline{
             steps {
                 script {
                     sh '''
-                        docker-compose down || true
+                        docker-compose down
                         docker tag ${IMAGE_NAME} ${USERNAME}/${IMAGE_NAME}:${IMAGE_TAG}
                         docker login -u ${USERNAME} -p ${PASSWORD}
                         docker push ${USERNAME}/${IMAGE_NAME}:${IMAGE_TAG}

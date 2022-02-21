@@ -45,7 +45,6 @@ pipeline{
                 }
             }
         }
-        
         stage ('Push image') {
             agent {
                 label 'agent1'
@@ -80,6 +79,7 @@ pipeline{
                     }
                 }
             }
+        }
         stage ('Deploy prod') {
             agent {
                 label 'agent1'

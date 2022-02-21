@@ -43,7 +43,8 @@ Accès ssh :
 Tous les serveurs cités doivent avoir un accès internet (accès github et dockerHub)
 
 
-## Variables d'environnement:
+
+## Jenkins : Variables d'environnement
 
 ```
   ansibleServer = "" // Serveur Ansible
@@ -57,6 +58,15 @@ Tous les serveurs cités doivent avoir un accès internet (accès github et dock
 ```
 
 Il existe d'autre variable (Ex : Port) qu'il n'est pas souhaitable de modifier.
+
+## Jenkins : dépendance
+Vous devez installer le plugin Global Slack Notifier et réaliser les paramétrages indiqués pour que les status de déploiement soient publiés automatiquement dans votre canal slack
+
+## Jenkins : Crédentials
+Veuillez creer les secrets key (credentials) suivants dans Jenkins :
+ID : slack pour stocker votre key slacl
+ID : dockerhubPswd pour stoker votre password de votre compte docker hub
+ID : snykKey pour stocker votre Key snyk.
 
 ## Ansible
 
@@ -179,6 +189,9 @@ Un fichier main_staging.yml
 
 Ces trois fichiers doivent etre déposés dans un sous répertoire du home du user ssh qui assure la connectivité entre l'agent Jenkins (ie agent1) et le serveur Ansible. 
 Le nom part défault du répertoire est "ansible_deploy". Vous pouvez le modifier via la variable d'environnement homeDirAnsible
+
+## Lancement
+Lorsque vous avez réalisé toutes les opérations vous pouvez configurer votre nouvel item de type pipeline dans jenkins.
 
 
 ## 7- Author

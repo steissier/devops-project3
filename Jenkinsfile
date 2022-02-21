@@ -71,12 +71,14 @@ pipeline{
                 label 'agent1'
             }
             steps {
-                script {
-                    sh '''
-                        ssh -o StrictHostKeyChecking=no ubuntu@${ansibleServer} -C ansible-playbook -i ${homeDirAnsible}/hosts.yml -e imgTag=${IMAGE_TAG} -e userName=${USERNAME} -e imgNameWebApp=${IMG_NAME_WEBAPP} ${homeDirAnsible}/main_staging.yml
-                        sleep 10
-                        curl ${stagingServer}:8000| tac | grep -iq Hello
-                    '''
+                withCredentials([sshUserPrivateKey(credentialsId: "ssh_connexion", keyFileVariable: 'keyfile', usernameVariable: 'sshuser')]) {
+                    script {
+                        sh '''
+                            ssh -o StrictHostKeyChecking=no -i ${keyfile} ${sshuser}@${ansibleServer} -C ansible-playbook -i ${homeDirAnsible}/hosts.yml -e imgTag=${IMAGE_TAG} -e userName=${USERNAME} -e imgNameWebApp=${IMG_NAME_WEBAPP} ${homeDirAnsible}/main_staging.yml
+                            sleep 10
+                            curl ${stagingServer}:8000| tac | grep -iq Hello
+                        '''
+                    }
                 }
             }
         }
@@ -85,12 +87,14 @@ pipeline{
                 label 'agent1'
             }
             steps {
-                script {
-                    sh '''
-                        ssh -o StrictHostKeyChecking=no ubuntu@${ansibleServer} -C ansible-playbook -i ${homeDirAnsible}/hosts.yml -e imgTag=${IMAGE_TAG} -e userName=${USERNAME} -e imgNameWebApp=${IMG_NAME_WEBAPP} ${homeDirAnsible}/main_prod.yml
-                        sleep 10
-                        curl ${prodServer}:8000 | tac | grep -iq Hello
-                    '''
+                withCredentials([sshUserPrivateKey(credentialsId: "ssh_connexion", keyFileVariable: 'keyfile', usernameVariable: 'sshuser')]) {
+                    script {
+                        sh '''
+                            ssh -o StrictHostKeyChecking=no -i ${keyfile} ${sshuser}@${ansibleServer} -C ansible-playbook -i ${homeDirAnsible}/hosts.yml -e imgTag=${IMAGE_TAG} -e userName=${USERNAME} -e imgNameWebApp=${IMG_NAME_WEBAPP} ${homeDirAnsible}/main_prod.yml
+                            sleep 10
+                            curl ${prodServer}:8000 | tac | grep -iq Hello
+                        '''
+                    }
                 }
             }
         }

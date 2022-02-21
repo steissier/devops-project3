@@ -81,7 +81,6 @@ pipeline{
                     }
                 }
             }
-        }
         stage ('Deploy prod') {
             agent {
                 label 'agent1'

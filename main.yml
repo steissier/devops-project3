@@ -1,5 +1,0 @@
-- name: "Installation Docker"
-  role: 
-
-- name: "lancement container"
-  hosts: "staging"

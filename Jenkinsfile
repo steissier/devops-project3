@@ -5,6 +5,7 @@ pipeline{
         stagingServer = "172.31.88.182"
         prodServer = "172.31.91.203"
         homeDirAnsible = "ansible_deploy"
+        exposePort = "8080"
         USERNAME = "26021973"
         REPO_GIT = "https://github.com/steissier/devops-project3.git"
         IMG_NAME_WEBAPP = "img_webapp"
@@ -72,9 +73,9 @@ pipeline{
                 withCredentials([sshUserPrivateKey(credentialsId: "ssh_connexion", keyFileVariable: 'keyfile', usernameVariable: 'sshuser')]) {
                     script {
                         sh '''
-                            ssh -o StrictHostKeyChecking=no -i ${keyfile} ${sshuser}@${ansibleServer} -C ansible-playbook -i ${homeDirAnsible}/hosts.yml -e imgTag=${IMAGE_TAG} -e userName=${USERNAME} -e imgNameWebApp=${IMG_NAME_WEBAPP} ${homeDirAnsible}/main_staging.yml
+                            ssh -o StrictHostKeyChecking=no ${sshuser}@${ansibleServer} -C ansible-playbook -i ${homeDirAnsible}/hosts.yml -e imgTag=${IMAGE_TAG} -e userName=${USERNAME} -e imgNameWebApp=${IMG_NAME_WEBAPP} -e exposePort=${exposePort} ${homeDirAnsible}/main_staging.yml
                             sleep 10
-                            curl ${stagingServer}:8000| tac | grep -iq Hello
+                            curl ${stagingServer}:${exposePort} | tac | grep -iq Hello
                         '''
                     }
                 }
@@ -88,9 +89,9 @@ pipeline{
                 withCredentials([sshUserPrivateKey(credentialsId: "ssh_connexion", keyFileVariable: 'keyfile', usernameVariable: 'sshuser')]) {
                     script {
                         sh '''
-                            ssh -o StrictHostKeyChecking=no -i ${keyfile} ${sshuser}@${ansibleServer} -C ansible-playbook -i ${homeDirAnsible}/hosts.yml -e imgTag=${IMAGE_TAG} -e userName=${USERNAME} -e imgNameWebApp=${IMG_NAME_WEBAPP} ${homeDirAnsible}/main_prod.yml
+                            ssh -o StrictHostKeyChecking=no ${sshuser}@${ansibleServer} -C ansible-playbook -i ${homeDirAnsible}/hosts.yml -e imgTag=${IMAGE_TAG} -e userName=${USERNAME} -e imgNameWebApp=${IMG_NAME_WEBAPP} -e exposePort=${exposePort} ${homeDirAnsible}/main_prod.yml
                             sleep 10
-                            curl ${prodServer}:8000 | tac | grep -iq Hello
+                            curl ${prodServer}:${exposePort} | tac | grep -iq Hello
                         '''
                     }
                 }

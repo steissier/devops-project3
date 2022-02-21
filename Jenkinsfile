@@ -1,7 +1,6 @@
 pipeline{
     environment{
         IMAGE_TAG = "${BUILD_NUMBER}"
-        sshUser = "ubuntu"
         ansibleServer = "172.31.93.196"
         stagingServer = "172.31.88.182"
         prodServer = "172.31.91.203"
@@ -74,6 +73,7 @@ pipeline{
                 withCredentials([sshUserPrivateKey(credentialsId: "ssh_connexion", keyFileVariable: 'keyfile', usernameVariable: 'sshuser')]) {
                     script {
                         sh '''
+                            echo user=${sshuser}: 
                             ssh -o StrictHostKeyChecking=no -i ${keyfile} ${sshuser}@${ansibleServer} -C ansible-playbook -i ${homeDirAnsible}/hosts.yml -e imgTag=${IMAGE_TAG} -e userName=${USERNAME} -e imgNameWebApp=${IMG_NAME_WEBAPP} ${homeDirAnsible}/main_staging.yml
                             sleep 10
                             curl ${stagingServer}:8000| tac | grep -iq Hello

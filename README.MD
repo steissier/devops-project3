@@ -2,23 +2,15 @@
 
 ## 1- Goal
 
-The goal of this project is to verify your ability to automate build and deploy containerized applications.
-In fact the most completed your pipeline will be, the most higher will be your rating.
-The rule is simple: Use at least all the recommended tools for this exercise to create your pipeline.
-The most appreciated pipeline need to implement the following pattern :
+The main goal of this repo is to allow to deploy automaticaly this Django Webapp.
+
 ```
  build ->  Test -> scan -> push -> Deploy (Prod and  Preprod) -> Test -> Monitor
 ```
-But you don't have to implement all the steps above.
 
-## 2- Recommended Tools
+## 2- Prerequities
 
-- Gitlab-CI/Jenkins
-- docker-compose
-- snyk
-- Ansible
-- Terraform (Optional)
-- ssh
+
 
 For the docker-compose.yml file (which will be used for deployment), please see the file below and get inspiration from it
 

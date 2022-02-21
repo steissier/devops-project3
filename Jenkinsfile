@@ -5,7 +5,7 @@ pipeline{
         stagingServer = "172.31.88.182"
         prodServer = "172.31.91.203"
         homeDirAnsible = "ansible_deploy"
-        exposePort = "8080"
+        exposePort = "8000"
         USERNAME = "26021973"
         REPO_GIT = "https://github.com/steissier/devops-project3.git"
         IMG_NAME_WEBAPP = "img_webapp"
@@ -13,7 +13,6 @@ pipeline{
         CONTAINTER_NAME_WEB = "webapp"
     }
     agent any
-
 
     stages {
         stage ('Build du conteneur & lancement application') {

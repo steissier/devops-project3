@@ -14,6 +14,7 @@ pipeline{
     }
     agent any
 
+
     stages {
         stage ('Build du conteneur & lancement application') {
             agent {

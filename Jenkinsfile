@@ -75,7 +75,7 @@ pipeline{
                     sh '''
                         ssh -o StrictHostKeyChecking=no ubuntu@${ansibleServer} -C ansible-playbook -i ${homeDirAnsible}/hosts.yml -e imgTag=${IMAGE_TAG} -e userName=${USERNAME} -e imgNameWebApp=${IMG_NAME_WEBAPP} ${homeDirAnsible}/main_staging.yml
                         sleep 10
-                        ssh -o StrictHostKeyChecking=no ubuntu@${stagingServer} -C curl ${STAGING}:8000                      
+                        curl ${stagingServer}:8000                      
                     '''
                 }
             }
@@ -89,7 +89,7 @@ pipeline{
                     sh '''
                         ssh -o StrictHostKeyChecking=no ubuntu@${ansibleServer} -C ansible-playbook -i ${homeDirAnsible}/hosts.yml -e imgTag=${IMAGE_TAG} -e userName=${USERNAME} -e imgNameWebApp=${IMG_NAME_WEBAPP} ${homeDirAnsible}/main_prod.yml
                         sleep 10
-                        ssh -o StrictHostKeyChecking=no ubuntu@${prodServer} -C curl ${STAGING}:8000                      
+                        curl ${prodServer}:8000                      
                     '''
                 }
             }

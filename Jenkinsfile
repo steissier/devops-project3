@@ -3,6 +3,8 @@ pipeline{
         IMAGE_TAG = "${BUILD_NUMBER}"
         sshUser = "ubuntu"
         ansibleServer = "172.31.93.196"
+        stagingServer = "172.31.88.182"
+        prodServer = "172.31.91.203"
         USERNAME = "26021973"
         REPO_GIT = "https://github.com/steissier/devops-project3.git"
         IMG_NAME_WEBAPP = "img_webapp"
@@ -67,9 +69,9 @@ pipeline{
             steps {
                 script {
                     sh '''
-                        ssh -o StrictHostKeyChecking=no ${sshuser}@${ansibleServer} -C ansible-playbook -i hosts.yml -e imgTag=${IMAGE_TAG} -e userName=${USERNAME} -e imgNameWebApp=${IMG_NAME_WEBAPP} main_staging.yml
+                        ssh -o StrictHostKeyChecking=no ubuntu@${ansibleServer} -C ansible-playbook -i hosts.yml -e imgTag=${IMAGE_TAG} -e userName=${USERNAME} -e imgNameWebApp=${IMG_NAME_WEBAPP} main_staging.yml
                         sleep 10
-                        ssh -o StrictHostKeyChecking=no ${sshuser}@${STAGING} -C curl ${STAGING}:8000                      
+                        ssh -o StrictHostKeyChecking=no ubuntu@${stagingServer} -C curl ${STAGING}:8000                      
                     '''
                 }
             }
@@ -78,9 +80,9 @@ pipeline{
             steps {
                 script {
                     sh '''
-                        ssh -o StrictHostKeyChecking=no ${sshuser}@${ansibleServer} -C ansible-playbook -i hosts.yml -e imgTag=${IMAGE_TAG} -e userName=${USERNAME} -e imgNameWebApp=${IMG_NAME_WEBAPP} main_prod.yml
+                        ssh -o StrictHostKeyChecking=no ubuntu@${ansibleServer} -C ansible-playbook -i hosts.yml -e imgTag=${IMAGE_TAG} -e userName=${USERNAME} -e imgNameWebApp=${IMG_NAME_WEBAPP} main_prod.yml
                         sleep 10
-                        ssh -o StrictHostKeyChecking=no ${sshuser}@${STAGING} -C curl ${STAGING}:8000                      
+                        ssh -o StrictHostKeyChecking=no ubuntu@${prodServer} -C curl ${STAGING}:8000                      
                     '''
                 }
             }

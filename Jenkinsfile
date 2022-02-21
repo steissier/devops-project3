@@ -14,7 +14,6 @@ pipeline{
     }
     agent any
 
-
     stages {
         stage ('Build du conteneur & lancement application') {
             agent {
@@ -76,7 +75,7 @@ pipeline{
                     sh '''
                         ssh -o StrictHostKeyChecking=no ubuntu@${ansibleServer} -C ansible-playbook -i ${homeDirAnsible}/hosts.yml -e imgTag=${IMAGE_TAG} -e userName=${USERNAME} -e imgNameWebApp=${IMG_NAME_WEBAPP} ${homeDirAnsible}/main_staging.yml
                         sleep 10
-                        curl ${stagingServer}:8000                      
+                        curl ${stagingServer}:8000| tac | grep -iq Hello
                     '''
                 }
             }
@@ -90,7 +89,7 @@ pipeline{
                     sh '''
                         ssh -o StrictHostKeyChecking=no ubuntu@${ansibleServer} -C ansible-playbook -i ${homeDirAnsible}/hosts.yml -e imgTag=${IMAGE_TAG} -e userName=${USERNAME} -e imgNameWebApp=${IMG_NAME_WEBAPP} ${homeDirAnsible}/main_prod.yml
                         sleep 10
-                        curl ${prodServer}:8000                      
+                        curl ${prodServer}:8000 | tac | grep -iq Hello
                     '''
                 }
             }

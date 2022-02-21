@@ -27,6 +27,7 @@ Environnement de CI sous jenkins:
   L'agent jenkins :
   - Version de Linux : ubuntu 20.x
   - Docker en dernière version
+  - Docker-composer en dernière version
   - Snyk CLI en dernière version
 
 Environnement Ansible 
@@ -44,6 +45,7 @@ Tous les serveurs cités doivent avoir un accès internet (accès github et dock
 
 ## Variables d'environnement:
 
+```
   ansibleServer = "" // Serveur Ansible
   stagingServer = "" // IP Serveur d'un des serveur de staging 
   prodServer = "" // IP d'un des serveur de production
@@ -52,18 +54,26 @@ Tous les serveurs cités doivent avoir un accès internet (accès github et dock
   REPO_GIT = "https://github.com/steissier/devops-project3.git" // Repository GIT 
   IMG_NAME_WEBAPP = "img_webapp" // Nom de l'image qui sera poussée sur le dockerHub
   CONTAINTER_NAME_WEB = "webapp" // Nom du conteneur pour la webapp
+```
 
 Il existe d'autre variable (Ex : Port) qu'il n'est pas souhaitable de modifier.
 
-## Playbook ansible
+## Ansible
+
+Dépendance :
+Vous devez installer le role pour installer les dépendances Docker pour Ansile
+```
+ansible-galaxy install steissier.docker_role
+```
 
 Voici les exemples de playbook que vous devez déployer sur votre serveur Ansible.
 
-Vous trouverez un exemple fonctionnel dans cette repo
+Vous trouverez un exemple fonctionnel dans cette repo GitHub :
 https://github.com/steissier/deploy_webapp_ansible.git
 
 3 fichiers :
-Un fichier hosts.yml : faisant l'inventaire de vos environnements 
+Un fichier hosts.yml : faisant l'inventaire de vos environnements
+``` 
     prod:
       vars:
         ansible_user: "ubuntu"
@@ -77,7 +87,7 @@ Un fichier hosts.yml : faisant l'inventaire de vos environnements
         ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
       hosts:
         AnsibleStaging:
-          ansible_host: "" // // Déclarez ici votre environnement de staging
+          ansible_host: "" // Déclarez ici votre environnement de staging
     master:
       vars:
         ansible_connection: local
@@ -85,8 +95,10 @@ Un fichier hosts.yml : faisant l'inventaire de vos environnements
       hosts:
         AnsibleMaster:
           ansible_host: "localhost
+``` 
 
-1 fichier main_prod.yml
+Un fichier main_prod.yml
+``` 
   - name: "Installation Docker"
     gather_facts: yes
     become: yes
@@ -123,58 +135,52 @@ Un fichier hosts.yml : faisant l'inventaire de vos environnements
             - "8000:{{ exposePort }}"
           links:
             - postgres
+``` 
 
-
-
-For the docker-compose.yml file (which will be used for deployment), please see the file below and get inspiration from it
-
+Un fichier main_staging.yml
 ```
-version: '3.3'
+- name: "Installation Docker"
+  gather_facts: yes
+  become: yes
+  hosts: "staging"
+  roles:
+    - role: steissier.docker_role
 
-services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    expose:
-      - "8000"
-    ports:
-      - "8000:8000"
-    links:
-      - postgres
-  postgres:
-    image: postgres:9
-    ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-```      
+- name: "lancement container staging"
+  vars:
+    imgNameWebApp: "img_webapp"
+    userName: "26021973"
+    imgTag: "latest"
+    exposePort: "8080"
+  hosts: "staging"
+  gather_facts: yes
+  become: yes
+  tasks:
+    - name: "lancement postgres"
+      docker_container:
+        name: "postgres"
+        image: "postgres:latest"
+        ports:
+          - "5432:5432"
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
 
-## 3- Build
+    - name: "recup container"
+      docker_container:
+        name: "webapp"
+        image: "{{ userName }}/{{ imgNameWebApp }}:{{ imgTag }}"
+        ports:
+          - "8000:{{ exposePort }}"
+        links:
+          - postgres
+```
 
-For build step you need to produce a Dockerfile to containerize application.
-For this project we recommend you **python:3** for base image
+Ces trois fichiers doivent etre déposés dans un sous répertoire du home du user ssh qui assure la connectivité entre l'agent Jenkins (ie agent1) et le serveur Ansible. 
+Le nom part défault du répertoire est "ansible_deploy". Vous pouvez le modifier via la variable d'environnement homeDirAnsible
 
-## 4- Security
-
-The security is an important aspect of this project, please make sure that you keep in mind security bests practises when you write script or any other action you made, because we will pay a special attention to that went we will review your work
-
-## 5- Delivrable
-
-At the end of the project you must provide us:
-- A documentation of your work with screenshots
-- A Powerpoint the present your work to the audience
-- All your source through a documented GitHub repo
-
-## 6- Have Fun
-
-Feel free to add some extra steps, extra tools to make your pipeline more powerful (code analysis, so on and so forth)
-We want you to enjoy yourself in this project and explore new possibility offers by the devops world
 
 ## 7- Author
-This project was created par EAZYTraining, please do not share it, duplicate it ...
-To contact us : contact@eazytraining.fr
+Ce projet a été créer par Sébastien Teissier dans le cadre de sa formation
 
-LAST THING ...
-![good luck](https://user-images.githubusercontent.com/18481009/84582398-cad38100-adeb-11ea-95e3-2a9d4c0d5437.gif)

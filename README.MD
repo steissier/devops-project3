@@ -1,6 +1,4 @@
-# Devops Project 3 : Django webapp CICD
-
-## 1- Objectifs
+# 1- Objectifs
 
 L'objectif principal est de déployer automatiquement l'application "webapp" fonctionnant en Python avec le framework Django et un base de données postgres.
 
@@ -14,7 +12,7 @@ Les tests de sécurité seront réalisé par snyk dont les resultats seront acce
  build ->  Test -> scan -> push -> Deploy (Prod and  Preprod) -> Test -> Monitor
 ```
 
-## 2- Pre-Requis
+# 2- Pre-Requis
 
 Vous devez avoir a minima 2 environments de déploiement:
   - 1 staging
@@ -34,7 +32,7 @@ Environnement Ansible
 - 1 serveur Ansible 
 
 
-## Connectivité 
+# Connectivité 
 
 Accès ssh :
 - Serveur Ansible vers les serveurs de production et de staging avec un login faisant parti du groupe root
@@ -42,7 +40,7 @@ Accès ssh :
 
 Tous les serveurs cités doivent avoir un accès internet (accès github et dockerHub)
 
-
+# Jenkins
 
 ## Jenkins : Variables d'environnement
 
@@ -68,21 +66,22 @@ ID : slack pour stocker votre key slacl
 ID : dockerhubPswd pour stoker votre password de votre compte docker hub
 ID : snykKey pour stocker votre Key snyk.
 
-## Ansible
+# Ansible
 
-Dépendance :
+## Dépendance :
 Vous devez installer le role pour installer les dépendances Docker pour Ansile
 ```
 ansible-galaxy install steissier.docker_role
 ```
 
+## Playbook
 Voici les exemples de playbook que vous devez déployer sur votre serveur Ansible.
 
 Vous trouverez un exemple fonctionnel dans cette repo GitHub :
 https://github.com/steissier/deploy_webapp_ansible.git
 
 3 fichiers :
-Un fichier hosts.yml : faisant l'inventaire de vos environnements
+### Un fichier hosts.yml : faisant l'inventaire de vos environnements
 ``` 
     prod:
       vars:
@@ -107,7 +106,7 @@ Un fichier hosts.yml : faisant l'inventaire de vos environnements
           ansible_host: "localhost
 ``` 
 
-Un fichier main_prod.yml
+### Un fichier main_prod.yml
 ``` 
   - name: "Installation Docker"
     gather_facts: yes
@@ -147,7 +146,7 @@ Un fichier main_prod.yml
             - postgres
 ``` 
 
-Un fichier main_staging.yml
+### Un fichier main_staging.yml
 ```
 - name: "Installation Docker"
   gather_facts: yes
@@ -190,10 +189,10 @@ Un fichier main_staging.yml
 Ces trois fichiers doivent etre déposés dans un sous répertoire du home du user ssh qui assure la connectivité entre l'agent Jenkins (ie agent1) et le serveur Ansible. 
 Le nom part défault du répertoire est "ansible_deploy". Vous pouvez le modifier via la variable d'environnement homeDirAnsible
 
-## Lancement
+# Lancement
 Lorsque vous avez réalisé toutes les opérations vous pouvez configurer votre nouvel item de type pipeline dans jenkins.
 
 
-## 7- Author
+# 7- Author
 Ce projet a été créer par Sébastien Teissier dans le cadre de sa formation
 
